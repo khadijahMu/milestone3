@@ -1,67 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flower Delivery App - Admin Panel</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flower Delivery App - Admin Panel</title>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <nav class="admin-nav">
-        <div class="nav-title">Admin Panel</div>
-        <div class="nav-buttons">
-            <a href="flowers.html" class="nav-button active">Flowers</a>
-            <a href="AddFlowers.html" class="nav-button">Add Flower</a>
-        </div>
-    </nav>
-    <div class="admin-panel">
-        <div class="flower-grid">
-            <!-- Flower 1 -->
-            <div class="flower-card">
-                <div class="flower-image"></div>
-                <div class="flower-details">
-                    <p><strong>Name:</strong> Name #1</p>
-                    <p><strong>Category:</strong> Category #1</p>
-                    <p><strong>Price:</strong> $100</p>
-                    <p><strong>Description:</strong> A beautiful red rose.</p>
-                    <button class="delete-btn" onclick="deleteFlower(this)">X</button>
-                </div>
-            </div>
-            <!-- Flower 2 -->
-            <div class="flower-card">
-                <div class="flower-image"></div>
-                <div class="flower-details">
-                    <p><strong>Name:</strong> Name #2</p>
-                    <p><strong>Category:</strong> Category #1</p>
-                    <p><strong>Price:</strong> $150</p>
-                    <p><strong>Description:</strong> A bright daffodil</p>
-                    <button class="delete-btn" onclick="deleteFlower(this)">X</button>
-                </div>
-            </div>
-        </div>   
-        <script>
-        function deleteFlower(button) {
-            const card = button.closest('.flower-card');
-            card.remove();
-        }
-        </script> 
-        <style>
-        .delete-btn {
-            background-color: #ff4444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        </style>  
-        <div class="footer">
-            <p>Flower Delivery App</p>
-            <p>Created for ElevateHER Innovation Space Ltd</p>
-            <p>By</p> 
-            <p> Khadijah Mu'azu Mustapha</p>
-            </div>
+  <nav class="admin-nav">
+    <div class="nav-title">Admin Panel</div>
+    <div class="nav-buttons">
+      <a href="index.html" class="nav-button active">Flowers</a>
+      <a href="AddFlowers.html" class="nav-button">Add Flower</a>
     </div>
+  </nav>
+  <section class="flower-gallery" id="landingFlowerGallery">
+</section>
+<div class="admin-panel">
+    <div class="flower-grid" id="flowerGrid">
+      <!-- Flower 1 -->
+      <div class="flower-card" data-id="1">
+        <div class="flower-image">
+          <img src="/uploads/1744592303541.jpg" alt="" />
+        </div>
+        <div class="flower-details">
+          <p><strong>Name:</strong> Red Rose</p>
+          <p><strong>Category:</strong> Roses</p>
+          <p><strong>Price:</strong> $100</p>
+          <p><strong>Description:</strong> A beautiful red rose.</p>
+          <button class="delete-btn" onclick="deleteFlower('1', this)">X</button>
+        </div>
+      </div>      
+      <!--  Flower 2 -->
+      <div class="flower-card" data-id="2">
+        <div class="flower-image">
+          <img src="/uploads/download.jpg" alt="" />
+        </div>
+        <div class="flower-details">
+          <p><strong>Name:</strong> Daffodil</p>
+          <p><strong>Category:</strong> Spring Flowers</p>
+          <p><strong>Price:</strong> $150</p>
+          <p><strong>Description:</strong> A bright daffodil</p>
+          <button class="delete-btn" onclick="deleteFlower('2', this)">X</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Flower Delivery App</p>
+    <p>Created for ElevateHER Innovation Space Ltd</p>
+    <p>By <strong>Khadijah Mu'azu Mustapha</strong></p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/flowers');
+        const flowers = await res.json();
+        console.log('Fetched flowers:', flowers); 
+        const gallery = document.getElementById('landingFlowerGallery');
+        if (!gallery) {
+          console.error('Landing gallery not found!');
+          return;
+        }
+        flowers.forEach(flower => {
+          const flowerCard = document.createElement('div');
+          flowerCard.className = 'flower-card landing-view';
+          flowerCard.innerHTML = `
+            <div class="flower-image">
+              <img src="${flower.image}" alt="${flower.name}" onerror="this.src='/uploads/default.jpg'" />
+            </div>
+            <div class="flower-info">
+              <h3>${flower.name}</h3>
+              <p>${flower.description}</p>
+              <p><strong>Price:</strong> $${flower.price}</p>
+            </div>
+          `;
+          gallery.appendChild(flowerCard);
+        });
+      } catch (err) {
+        console.error('Failed to fetch flowers:', err);
+      }
+    });
+  </script>
+   <style>
+    .delete-btn {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-top: 10px;
+      float: right;
+    }
+    .delete-btn:hover {
+      background-color: #cc0000;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    .flower-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px;
+}
+.landing-view {
+  border: 1px solid #ddd;
+  padding: 15px;
+  width: 250px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.landing-view img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+  </style>
 </body>
 </html>

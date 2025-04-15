@@ -65,7 +65,7 @@ h1 {
     padding-bottom: 15px;
     border-bottom: 1px solid #eee;
 }
-/* FLOWER CARDS*/
+/* FLOWER CARDS */
 .flower-grid {
     display: flex;
     flex-direction: column;
@@ -75,40 +75,33 @@ h1 {
 .flower-card {
     display: flex;
     background: white;
-    border: 1px solid #eee; 
+    border: 1px solid #eee;
     padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .flower-image {
     width: 200px;
-    min-width: 200px;
     height: 200px;
-    background-color: white;
-    border: 2px solid black;
+    border: 2px solid #000;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; 
+    background-color: #f0f0f0;
 }
-.flower-card:nth-child(1) .flower-image::before {
-    content: "Flower Image 1";
-    color: #999;
-    font-size: 14px;
-}
-.flower-card:nth-child(2) .flower-image::before {
-    content: "Flower Image 2";
-    color: #999;
-    font-size: 14px;
+.flower-image img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    position: relative;
+    z-index: 2;
 }
 .flower-details {
     padding: 20px;
     flex-grow: 1;
-    text-align: justify;
+    text-align: left;
 }
 .flower-details p {
     margin: 12px 0;
-}
-.flower-details strong {
-    color: #2c3e50;
 }
 .flower-details strong {
     color: red;
@@ -229,3 +222,4 @@ body {
     margin-top: 40px;
     font-size: 14px;
   }
+  
