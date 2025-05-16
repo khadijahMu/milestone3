@@ -11,7 +11,6 @@ render:https://milestone3-a8fj.onrender.com
 ## Setup Instructions
 
 ### 1. Backend Setup
-```bash
 # Install dependencies
 npm install express mongoose cors dotenv
 

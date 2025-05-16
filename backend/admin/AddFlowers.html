@@ -1,47 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Flower - Admin Panel</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <nav class="admin-nav">
-        <div class="nav-title">Admin Panel</div>
-        <div class="nav-buttons">
-            <a href="flowers.html" class="nav-button active">Flowers</a>
-            <a href="AddFlowers.html" class="nav-button">Add Flower</a>
-        </div>
-    </nav>
-    </header>
-    <form class="flower-form" enctype="multipart/form-data" action="/admin/add-flower" method="POST">
-      <label for="image">Image</label>
-      <div class="upload-box">
-        <input type="file" name="image" id="image" accept="image/*" />
-        <div class="upload-placeholder">Upload</div>
+  <nav class="admin-nav">
+    <div class="nav-title">Admin Panel</div>
+    <div class="nav-buttons">
+      <a href="index.html" class="nav-button">Flowers</a>
+      <a href="AddFlowers.html" class="nav-button active">Add Flower</a>
+    </div>
+  </nav>
+  <form id="flowerForm" class="flower-form" enctype="multipart/form-data">
+    <label for="image">Image</label>
+    <div class="upload-box">
+      <input type="file" name="image" id="image" accept="image/*" required>
+      <div class="upload-placeholder">Click to upload</div>
+      <img id="imagePreview" src="#" alt="Preview" style="display:none; max-width:200px; margin-top:10px;">
+    </div>
+    <label for="name">Name:</label>
+    <input type="text" name="name" id="name" required>
+    <div class="input-row">
+      <div>
+        <label for="category">Category:</label>
+        <input type="text" name="category" id="category" required>
       </div>
-      <label for="name">Name:</label>
-      <input type="text" name="name" id="name" required />
-      <div class="input-row">
-        <div>
-          <label for="category">Category:</label>
-          <input type="text" name="category" id="category" required />
-        </div>
-        <div>
-          <label for="price">Price:</label>
-          <input type="number" name="price" id="price" required />
-        </div>
+      <div>
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" required step="0.01" min="0">
       </div>
-      <label for="description">Description:</label>
-      <textarea name="description" id="description" rows="5"></textarea>
-      <button type="submit" class="btn-submit">SUBMIT</button>
-    </form>
-    <footer class="admin-footer">
-      <p><strong>Flower Delivery App</strong></p>
-      <p>Created for ElevateHER Innovation Space Ltd</p>
-      <p>By <strong>Khadijah Mu'azu Mustapha</strong></p>
-    </footer>
-  </div>
+    </div>
+    <label for="description">Description:</label>
+    <textarea name="description" id="description" rows="5" required></textarea>
+    <button type="submit" class="btn-submit">SUBMIT</button>
+  </form>
+  <footer class="admin-footer">
+    <p><strong>Flower Delivery App</strong></p>
+    <p>Created for ElevateHER Innovation Space Ltd</p>
+    <p>By <strong>Khadijah Mu'azu Mustapha</strong></p>
+  </footer>
+  <script>
+    // Image Preview
+    document.getElementById('image').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const preview = document.getElementById('imagePreview');
+          preview.src = event.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    // Form Submission
+    document.getElementById('flowerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      try {
+        const response = await fetch('/admin/add-flower', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        if (response.ok) {
+          alert('Flower added successfully!');
+          window.location.href = 'index.html';
+        } else {
+          throw new Error(result.error || 'Failed to add flower');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert(error.message);
+      }
+    });
+  </script>
 </body>
 </html>
